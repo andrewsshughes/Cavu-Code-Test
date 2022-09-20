@@ -1,10 +1,10 @@
 <template>
-    <form id="flight-edit">
+    <form id="flight-edit" @submit.prevent="updateFlight">
         <div class="input-group">
             <label for="flightSelect">Flight</label>
             <select name="flightSelect" id="flightSelect" v-model="selectedFlight">
                 <option disabled :value="null">Select a flight</option>
-                <option v-for="(flight, i) in flights" :key="i" :value="flight">{{flight.flightNumber}} - {{flight.arrivalAirport.name}}</option>
+                <option v-for="(flight, i) in flights" :key="i" :value="flight">[{{formatToTime(flight.estimatedDepartureDateTime)}}]{{flight.flightNumber}} - {{flight.arrivalAirport.name}}</option>
             </select>
         </div>
         <div class="input-group">
@@ -39,6 +39,18 @@
                 selectedFlight: null,
                 selectedStatus: null,
                 customStatus: ""
+            }
+        },
+        methods: {
+            updateFlight(){
+                console.log("Updating Flight");
+                if(this.selectedFlight != null & this.selectedStatus != null){
+                    this.selectedFlight.status = this.selectedStatus === 'Text Input' ? this.customStatus : this.selectedStatus;
+                }
+            },
+            formatToTime(date){
+                const dateObj = new Date(date);
+                return `${dateObj.getHours()}.${("00"+dateObj.getMinutes()).substr(-2)}`;
             }
         }
     }

@@ -1,8 +1,8 @@
 <template>
   <div id="nuxt-wrap">
     <PageHeader/>
-    <div id="flight-table">
-      <div class="error" v-if="error != undefined">
+    <div id="flight-table" v-if="error != undefined">
+      <div class="error">
         {{error.message}}
         <p>{{error.value}}</p>
       </div>
@@ -24,13 +24,15 @@ export default {
     async asyncData({ $axios }) {
       let data;
       try {
-        data = await $axios.get("https://6315ae3e5b85ba9b11e4cb85.mockapi.io/departures/Flightdata");
+        data = await $axios.$get("https://6315ae3e5b85ba9b11e4cb85.mockapi.io/departures/Flightdata");
         return {
           departures: data.allDepartures,
+          error: undefined
         }
       } catch (e){
         return {
-          error: {message: "Unable to get flight data", value: e}
+          error: {message: "Unable to get flight data", value: e},
+          departures: undefined
         }
       };
     },
